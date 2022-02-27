@@ -24,6 +24,6 @@ class WpMatomoAPI
 
     public static function registerCommand()
     {
-        WP_CLI::add_command('matomo', [UpdateStatsFromMatomo::class, 'runCommand']);
+        WP_CLI::add_command('matomo_update_visit_stats', [UpdateStatsFromMatomo::class, 'runCommand']);
     }
 }
