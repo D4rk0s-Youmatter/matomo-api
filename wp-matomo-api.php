@@ -29,7 +29,6 @@ if ( ! defined('WPINC' ) ) {
 	die;
 }
 
-include_once "vendor/autoload.php";
-
 register_activation_hook(__FILE__, [WpMatomoAPI::class, 'pluginActivationSequence']);
 register_deactivation_hook(__FILE__, [WpMatomoAPI::class, 'pluginDeactivationSequence']);
+add_action( 'cli_init', [WpMatomoAPI::class, 'registerCommand'] );

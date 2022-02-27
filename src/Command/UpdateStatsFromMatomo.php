@@ -5,6 +5,7 @@ namespace D4rk0s\WpMatomoAPI\Command;
 use D4rk0s\WpMatomoAPI\WpMatomoAPI;
 use DateTime;
 use Roots\WPConfig\Config;
+use WP_CLI;
 
 class UpdateStatsFromMatomo
 {
@@ -32,16 +33,29 @@ class UpdateStatsFromMatomo
             $previousYearVisitsStats = $this->executeQuery($postData, $url);
             update_option(WpMatomoAPI::PREVIOUS_YEAR_VISIT_OPTION_LABEL, $previousYearVisitsStats['nb_visits']);
         }
+
+        WP_CLI::success('Mise à jour réalisée');
     }
 
+    /**
+     * @todo: Probleme de sécurité avec le SSL.
+     * @param array $postData
+     * @param string $url
+     * @throws \JsonException
+     * @return array
+     */
     private function executeQuery(array $postData, string $url) : array
     {
-        $opts = array('http' =>
-            array(
+        $opts = array(
+            'http' =>
+            [
                 'method' => 'POST',
                 'header' => 'Content-type: application/x-www-form-urlencoded',
                 'content' => http_build_query($postData)
-            )
+            ],
+            'ssl' => [
+                'verify_peer' => false
+            ]
         );
 
         $context = stream_context_create($opts);
