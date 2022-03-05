@@ -26,12 +26,12 @@ class UpdateStatsFromMatomo
 
         $postData['date'] = "01/01/$currentYear";
         $currentYearVisitsStats = $this->executeQuery($postData, $url);
-        update_option(WpMatomoAPI::CURRENT_YEAR_VISIT_OPTION_LABEL, $currentYearVisitsStats['nb_visits']);
+        update_site_option(WpMatomoAPI::CURRENT_YEAR_VISIT_OPTION_LABEL, $currentYearVisitsStats['nb_visits']);
 
-        if(get_option(WpMatomoAPI::PREVIOUS_YEAR_VISIT_OPTION_LABEL)) {
+        if(get_site_option(WpMatomoAPI::PREVIOUS_YEAR_VISIT_OPTION_LABEL)) {
             $postData['date'] = "01/01/$previousYear";
             $previousYearVisitsStats = $this->executeQuery($postData, $url);
-            update_option(WpMatomoAPI::PREVIOUS_YEAR_VISIT_OPTION_LABEL, $previousYearVisitsStats['nb_visits']);
+            update_site_option(WpMatomoAPI::PREVIOUS_YEAR_VISIT_OPTION_LABEL, $previousYearVisitsStats['nb_visits']);
         }
 
         WP_CLI::success('Mise à jour réalisée');
