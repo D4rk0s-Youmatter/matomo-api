@@ -26,8 +26,9 @@ class UpdateStatsFromMatomo
 
         $postData['date'] = "01/01/$currentYear";
         $currentYearVisitsStats = $this->executeQuery($postData, $url);
-        update_site_option(WpMatomoAPI::CURRENT_YEAR_VISIT_OPTION_LABEL, $currentYearVisitsStats['nb_visits']);
+        $nbVisits = (int) $currentYearVisitsStats['nb_visits'];
 
+	update_site_option(WpMatomoAPI::CURRENT_YEAR_VISIT_OPTION_LABEL, (int) $currentYear === 2022 ? $nbVisits + 800000 : $nbVisits);
         if(get_site_option(WpMatomoAPI::PREVIOUS_YEAR_VISIT_OPTION_LABEL)) {
             $postData['date'] = "01/01/$previousYear";
             $previousYearVisitsStats = $this->executeQuery($postData, $url);
