@@ -21,7 +21,7 @@ class GetMostViewedPages
 
         // https://matomo.youmatter.world/?module=API&filter_limit=50&idSubtable=336&showColumns=nb_visits&expanded=0&method=Actions.getPageUrls&idSite=1&period=year&date=yesterday&format=JSON&token_auth=6746d778730db1d260ca40fb6250a9bb&filter_sort_column=nb_visits&filter_sort_order=desc
         $postData = [
-            'filter_limit' => 50,
+            'filter_limit' => 15,
             'idSubtable' => 336,
             'showColumns' => 'nb_visits',
             'expanded' => 0,
@@ -47,10 +47,11 @@ class GetMostViewedPages
         }
 
         // Récupération des articles dans la base
-        $dbResults = $wpdb->get_results("SELECT ID, post_name from ".$wpdb->posts." WHERE post_name IN (".implode(',',$pageLabels).")");
+        switch_to_blog(3);
+        $dbResults = $wpdb->get_results("SELECT ID, post_name from ".$wpdb->posts." WHERE post_name IN ('".implode('\',\'',$pageLabels)."')");
         $pageNamedOrderedResults = [];
         foreach($dbResults as $dbResult) {
-            $pageNamedOrderedResults[$dbResults['post_name']] = (int) $dbResults['ID'];
+            $pageNamedOrderedResults[$dbResult->post_name] = (int) $dbResult->ID;
         }
 
         // Retourne les ids dans l'ordre
@@ -62,10 +63,8 @@ class GetMostViewedPages
             $finalResult[] = $pageNamedOrderedResults[$data['label']];
         }
 
-        var_dump($finalResult); die;
+        update_site_option(WpMatomoAPI::MOST_READ_ARTICLES_FR, array_chunk($finalResult,8));
 
-        update_site_option(WpMatomoAPI::CURRENT_YEAR_VISIT_OPTION_LABEL, $currentYearVisitsStats['nb_visits']);
-
-        WP_CLI::success('Mise à jour réalisée');
+        WP_CLI::success('Récupération des articles les plus lus terminé');
     }
 }
