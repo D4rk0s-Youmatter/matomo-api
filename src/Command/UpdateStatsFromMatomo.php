@@ -5,7 +5,6 @@ namespace D4rk0s\WpMatomoAPI\Command;
 use D4rk0s\WpMatomoAPI\Toolbox\MatomoToolbox;
 use D4rk0s\WpMatomoAPI\WpMatomoAPI;
 use DateTime;
-use Roots\WPConfig\Config;
 use WP_CLI;
 
 class UpdateStatsFromMatomo

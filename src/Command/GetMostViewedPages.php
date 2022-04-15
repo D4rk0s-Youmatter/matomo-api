@@ -4,8 +4,6 @@ namespace D4rk0s\WpMatomoAPI\Command;
 
 use D4rk0s\WpMatomoAPI\Toolbox\MatomoToolbox;
 use D4rk0s\WpMatomoAPI\WpMatomoAPI;
-use DateTime;
-use Roots\WPConfig\Config;
 use WP_CLI;
 
 class GetMostViewedPages
@@ -14,6 +12,8 @@ class GetMostViewedPages
 
     public static function runCommand()
     {
+        global $wpdb;
+
         // Il faut boucler sur l'ensemble des articles et récupérer le post-name
         // Ca sera la clef à faire matcher avec la colonne label du retour de matomo.
         // Il faut vérifier aussi si il nous faut la même chose.
@@ -34,7 +34,36 @@ class GetMostViewedPages
         ];
 
         $jsonResponse = self::executeQuery($postData);
-        var_dump($jsonResponse); die;
+
+        // Traitement des résultats
+        $pagesViews = [];
+        $pageLabels = [];
+        foreach($jsonResponse as $page) {
+            $pagesViews[] = [
+                'label' => $page['label'],
+                'nb_visits'=> (int) $page['nb_visits']
+            ];
+            $pageLabels[] = $page['label'];
+        }
+
+        // Récupération des articles dans la base
+        $dbResults = $wpdb->get_results("SELECT ID, post_name from ".$wpdb->posts." WHERE post_name IN (".implode(',',$pageLabels).")");
+        $pageNamedOrderedResults = [];
+        foreach($dbResults as $dbResult) {
+            $pageNamedOrderedResults[$dbResults['post_name']] = (int) $dbResults['ID'];
+        }
+
+        // Retourne les ids dans l'ordre
+        $finalResult = [];
+        foreach($pagesViews as $data) {
+            if(!isset($pageNamedOrderedResults[$data['label']])) {
+                continue;
+            }
+            $finalResult[] = $pageNamedOrderedResults[$data['label']];
+        }
+
+        var_dump($finalResult); die;
+
         update_site_option(WpMatomoAPI::CURRENT_YEAR_VISIT_OPTION_LABEL, $currentYearVisitsStats['nb_visits']);
 
         WP_CLI::success('Mise à jour réalisée');

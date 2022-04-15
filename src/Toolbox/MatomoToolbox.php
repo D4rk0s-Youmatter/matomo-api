@@ -12,10 +12,10 @@ trait MatomoToolbox
      */
     private static function executeQuery(array $postData) : array
     {
-        $url = Config::get("MATOMO_URL");
+        $url = getenv("MATOMO_URL");
         $postData['module'] = 'API';
         $postData['format'] = 'JSON';
-        $postData['token_auth'] = Config::get("MATOMO_API_KEY");
+        $postData['token_auth'] = getenv("MATOMO_API_KEY");
 
         $opts = array(
             'http' =>
