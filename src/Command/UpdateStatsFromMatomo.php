@@ -13,7 +13,7 @@ class UpdateStatsFromMatomo
 
     use MatomoToolbox;
 
-    public function runCommand()
+    public static function runCommand()
     {
         $currentYear = (new DateTime())->format('Y');
         $postData = [
@@ -23,7 +23,7 @@ class UpdateStatsFromMatomo
         ];
 
         $postData['date'] = "01/01/$currentYear";
-        $currentYearVisitsStats = $this->executeQuery($postData);
+        $currentYearVisitsStats = self::executeQuery($postData);
         update_site_option(WpMatomoAPI::CURRENT_YEAR_VISIT_OPTION_LABEL, $currentYearVisitsStats['nb_visits']);
 
         WP_CLI::success('Mise à jour réalisée');

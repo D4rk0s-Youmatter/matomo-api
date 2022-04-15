@@ -12,7 +12,7 @@ class GetMostViewedPages
 {
     use MatomoToolbox;
 
-    public function runCommand()
+    public static function runCommand()
     {
         // Il faut boucler sur l'ensemble des articles et récupérer le post-name
         // Ca sera la clef à faire matcher avec la colonne label du retour de matomo.
@@ -33,7 +33,7 @@ class GetMostViewedPages
             'filter_sort_order' => 'desc'
         ];
 
-        $jsonResponse = $this->executeQuery($postData);
+        $jsonResponse = self::executeQuery($postData);
         var_dump($jsonResponse); die;
         update_site_option(WpMatomoAPI::CURRENT_YEAR_VISIT_OPTION_LABEL, $currentYearVisitsStats['nb_visits']);
 

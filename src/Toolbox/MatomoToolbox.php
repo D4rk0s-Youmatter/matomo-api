@@ -10,7 +10,7 @@ trait MatomoToolbox
      * @throws \JsonException
      * @return array
      */
-    private function executeQuery(array $postData) : array
+    private static function executeQuery(array $postData) : array
     {
         $url = Config::get("MATOMO_URL");
         $postData['module'] = 'API';
