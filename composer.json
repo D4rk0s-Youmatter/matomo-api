@@ -15,5 +15,8 @@
             "name": "D4rk0s",
             "email": "gregory@d4rk0s.net"
         }
-    ]
+    ],
+  "require": {
+    "ext-json": "*"
+  }
 }
