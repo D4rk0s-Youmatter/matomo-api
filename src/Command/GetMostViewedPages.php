@@ -57,7 +57,7 @@ class GetMostViewedPages
             $finalResult[] = $pageNamedOrderedResults[$data['label']];
         }
 
-        update_site_option(WpMatomoAPI::MOST_READ_ARTICLES_FR, array_chunk($finalResult,8));
+        update_site_option(WpMatomoAPI::MOST_READ_ARTICLES_FR, current(array_chunk($finalResult,8)));
 
         WP_CLI::success('Récupération des articles les plus lus terminé');
     }
