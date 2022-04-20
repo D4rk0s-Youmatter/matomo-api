@@ -15,12 +15,25 @@ class GetMostViewedPages
         global $wpdb;
 
         $postData = [
-            'filter_limit' => 15,
-            'idSubtable' => 336,
+            'filter_limit' => 2,
             'showColumns' => 'nb_visits',
             'expanded' => 0,
             'method' => 'Actions.getPageUrls',
             'idSite' => 1,
+            'period' => 'year',
+            'date'=> 'yesterday'
+        ];
+
+        $jsonResponse = self::executeQuery($postData);
+        $idSubTable = (int) $jsonResponse[1]['idsubdatatable'];
+
+        $postData = [
+            'filter_limit' => 15,
+            'showColumns' => 'nb_visits',
+            'expanded' => 0,
+            'method' => 'Actions.getPageUrls',
+            'idSite' => 1,
+            'idSubtable' => $idSubTable,
             'period' => 'year',
             'date'=> 'yesterday',
             'filter_sort_column' => 'nb_visits',
