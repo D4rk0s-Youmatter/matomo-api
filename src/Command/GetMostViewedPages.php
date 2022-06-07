@@ -34,8 +34,8 @@ class GetMostViewedPages
             'method' => 'Actions.getPageUrls',
             'idSite' => 1,
             'idSubtable' => $idSubTable,
-            'period' => 'year',
-            'date'=> 'yesterday',
+            'period' => 'range',
+            'date'=> (new \DateTime())->sub(new \DateInterval('P4M'))->format('Y-m-d').",".(new \DateTime())->format('Y-m-d'),
             'filter_sort_column' => 'nb_visits',
             'filter_sort_order' => 'desc'
         ];
